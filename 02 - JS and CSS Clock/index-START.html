@@ -1,75 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS + CSS Clock</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
-
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS + CSS Clock</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
     <div class="clock">
       <div class="clock-face">
+        <div class="number number-12">12</div>
+        <div class="number number-11">11</div>
+        <div class="number number-10">10</div>
+        <div class="number number-9">9</div>
+        <div class="number number-8">8</div>
+        <div class="number number-7">7</div>
+        <div class="number number-6">6</div>
+        <div class="number number-5">5</div>
+        <div class="number number-4">4</div>
+        <div class="number number-3">3</div>
+        <div class="number number-2">2</div>
+        <div class="number number-1">1</div>
+
         <div class="hand hour-hand"></div>
         <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
       </div>
     </div>
 
+    <style>
+      html {
+        background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5);
+        background-size: cover;
+        font-family: "helvetica neue";
+        text-align: center;
+        font-size: 10px; /* this will inform other font-size esp rem */
+      }
 
-  <style>
-    html {
-      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
-      background-size: cover;
-      font-family: 'helvetica neue';
-      text-align: center;
-      font-size: 10px;
-    }
+      body {
+        margin: 0;
+        font-size: 2rem;
+        display: flex;
+        flex: 1;
+        min-height: 100vh;
+        align-items: center;
+      }
 
-    body {
-      margin: 0;
-      font-size: 2rem;
-      display: flex;
-      flex: 1;
-      min-height: 100vh;
-      align-items: center;
-    }
+      .clock {
+        /* width and height is in rem due to RWD */
+        /* but border and margin is in px due to the need for precise, fixed-size elements */
+        width: 30rem;
+        height: 30rem;
+        border: 20px solid white;
+        border-radius: 50%;
+        margin: 50px auto;
+        position: relative;
+        padding: 2rem;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+          inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+      }
 
-    .clock {
-      width: 30rem;
-      height: 30rem;
-      border: 20px solid white;
-      border-radius: 50%;
-      margin: 50px auto;
-      position: relative;
-      padding: 2rem;
-      box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
-        inset 0 0 0 3px #EFEFEF,
-        inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
-    }
+      .clock-face {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: translateY(
+          -3px
+        ); /* account for the height of the clock hands */
+      }
 
-    .clock-face {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
-    }
+      .hand {
+        width: 50%;
+        height: 6px;
+        background: black;
+        position: absolute;
+        top: 50%;
+        transform-origin: 100%; /* location along the x-axis*/
+        transform: rotate(90deg);
+        transition: all 0.05s;
+        transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+      }
 
-    .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
-      position: absolute;
-      top: 50%;
-    }
+      .number {
+        position: absolute;
+        width: 3%;
+        transform-origin: center center;
+      }
 
-  </style>
+      .number-1 {
+        top: 8%;
+        left: 69%;
+      }
+      .number-2 {
+        top: 24%;
+        left: 86%;
+      }
+      .number-3 {
+        top: 46.5%;
+        left: 93%;
+      }
+      .number-4 {
+        top: 70%;
+        left: 88%;
+      }
+      .number-5 {
+        top: 88%;
+        left: 70%;
+      }
+      .number-6 {
+        top: 94%;
+        left: 47%;
+      }
+      .number-7 {
+        top: 88%;
+        left: 24%;
+      }
+      .number-8 {
+        top: 70%;
+        left: 6%;
+      }
+      .number-9 {
+        top: 46.5%;
+        left: 1%;
+      }
+      .number-10 {
+        top: 25%;
+        left: 8%;
+      }
+      .number-11 {
+        top: 8%;
+        left: 25%;
+      }
+      .number-12 {
+        top: 3%;
+        left: 47%;
+      }
 
-  <script>
+      .hour-hand {
+        width: 30%;
+        background-color: black;
+        left: 20%; /* Center the hour hand horizontally */
+        border-radius: 100px;
+      }
 
+      .min-hand {
+        background-color: black;
+        border-radius: 100px;
+      }
 
-  </script>
-</body>
+      .second-hand {
+        height: 4px;
+        border-radius: 100px;
+        background-color: gray;
+      }
+    </style>
+
+    <script>
+      const secondHand = document.querySelector(".second-hand");
+      const hourHand = document.querySelector(".hour-hand");
+      const minHand = document.querySelector(".min-hand");
+
+      function setDate() {
+        const now = new Date();
+
+        const seconds = now.getSeconds(); // e.g. 53s
+        const secondsDegrees = (seconds / 60) * 360 + 90;
+        // 1. seconds / 60 = how far current second is into a min
+        // 2. * 360  is to convert it into degrees.
+        // 3. adding 90 is to ensure secondhands strike exactly on 12 o'clck when 60s
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+        console.log(`seconds: ${seconds}`);
+        console.log(`secondDEG: ${secondsDegrees}`);
+
+        const mins = now.getMinutes();
+        const minDegrees = (mins / 60) * 360 + (seconds / 60) * 6 + 90; // each time it moves
+        // each min is a 6deg move
+        minHand.style.transform = `rotate(${minDegrees}deg)`;
+        console.log(`min: ${mins}`);
+        console.log(`minDEG: ${minDegrees}`);
+
+        const hour = now.getHours();
+        const hourDegrees = (hour / 12) * 360 + (mins / 60) * 30 + 90;
+        // (hour / 12 * 360) = determine rotation angle of hour hand on a clock
+        // // so each hour is a 30deg move
+        hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+      }
+
+      setInterval(setDate, 1000);
+    </script>
+  </body>
 </html>
